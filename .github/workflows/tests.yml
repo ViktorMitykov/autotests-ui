@@ -1,0 +1,56 @@
+name: UI tests
+
+on:
+  push:
+    brunches:
+      - main
+  pull_request:
+    brunches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v7
+
+    - name: set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.13'
+
+    - name: install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install --with-deps
+
+    - name: Run playwright tests with pytest and generate allure report
+      run: |
+        pytest -m regression --aluredir=allure-results -n auto 
+
+    - name: Get allure history
+      uses: actions/checkout@v7
+      if: always()
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+
+    - name: Generate allure report with history
+      uses: simple-elf/allure-report-action@v1.14
+      if: always()
+      with:
+        allure_results: allure-results
+        allure_history: allure-history
+
+    - name: Deploy report to Github pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: allure-history
+
