@@ -29,7 +29,7 @@ jobs:
 
       - name: Run playwright tests with pytest and generate allure report
         run: |
-          pytest -m regression --aluredir=allure-results -n auto 
+          pytest -m regression --alluredir=allure-results -n auto 
 
       - name: Get allure history
         uses: actions/checkout@v7
