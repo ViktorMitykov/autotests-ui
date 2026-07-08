@@ -1,11 +1,19 @@
+import allure
 from playwright.sync_api import expect
 
 from elements.base_element import BaseElement
 
 class Button(BaseElement):
-    def check_enabled(self, **kwargs):
-        locator = self.get_locator(**kwargs)
+    @property
+    def type_of(self)-> str:
+        return "Button"
 
-    def check_disabled(self, **kwagrs):
-        locator = self.get_locator(**kwagrs)
-        expect(locator).to_be_disabled()
+    def check_enabled(self, nth: int = 0, **kwargs):
+        with allure.step(f'Checking that {self.type_of} "{self.name}" is enabled'):
+            locator = self.get_locator(nth, **kwargs)
+            expect(locator).to_be_enabled()
+
+    def check_disabled(self, nth: int = 0, **kwagrs):
+        with allure.step(f'Checking that {self.type_of} "{self.name}" is disabled'):
+            locator = self.get_locator(nth, **kwagrs)
+            expect(locator).to_be_disabled()

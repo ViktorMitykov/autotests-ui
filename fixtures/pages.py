@@ -2,11 +2,11 @@ from playwright.sync_api import Page
 import pytest
 
 from fixtures.browser import chromium_page_with_state
-from pages.create_course_page import CreateCoursesPage
-from pages.dashboard_page import DashboardPage
-from pages.login_page import LoginPage
-from pages.registration_page import RegistrationPage
-from pages.courses_list_page import CoursesListPage
+from pages.courses.create_course_page import CreateCoursesPage
+from pages.dashboard.dashboard_page import DashboardPage
+from pages.authentication.login_page import LoginPage
+from pages.authentication.registration_page import RegistrationPage
+from pages.courses.courses_list_page import CoursesListPage
 
 
 @pytest.fixture()

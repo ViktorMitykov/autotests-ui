@@ -1,3 +1,7 @@
+import re
+
+import allure
+
 from pages.base_page import BasePage
 from playwright.sync_api import Page, expect
 
@@ -19,12 +23,16 @@ class LoginPage(BasePage):
             page, 'login-page-wrong-email-or-password-alert', "Wrong email or password"
         )
 
-    def click_login_button(self):
+    def click_login_button(self, with_check_url: bool = True):
         self.login_button.click()
+        if with_check_url:
+            self.check_current_url(re.compile(".*/#/dashboard"))
 
     def click_registration_button(self):
         self.registration_link.click()
+        self.check_current_url(re.compile(".*/#/auth/registration"))
 
+    @allure.step("Check visible wrong email or password alert")
     def check_visible_wrong_email_or_password_alert(self):
         self.wrong_email_or_password_alert.check_visible()
         self.wrong_email_or_password_alert.check_have_text("Wrong email or password")
