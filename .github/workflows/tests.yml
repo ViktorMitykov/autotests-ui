@@ -50,6 +50,18 @@ jobs:
           allure_results: ./allure-results
           allure_history: allure-history
 
+      - name: Debug Allure Report
+        if: always()
+        run: |
+          echo "=== Содержимое allure-results ==="
+          ls -la allure-results/ | head -20
+
+          echo "=== Содержимое allure-report ==="
+          ls -la allure-report/ || echo "Папка allure-report не существует!"
+
+          echo "=== Поиск index.html ==="
+          find . -name "index.html" 2>/dev/null || echo "index.html не найден"
+
       - name: Deploy report to Github pages
         if: always()
         uses: peaceiris/actions-gh-pages@v2
