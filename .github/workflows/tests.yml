@@ -2,10 +2,10 @@ name: UI tests
 
 on:
   push:
-    brunches:
+    branches:
       - main
   pull_request:
-    brunches:
+    branches:
       - main
 
 jobs:
