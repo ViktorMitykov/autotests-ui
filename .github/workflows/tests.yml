@@ -32,7 +32,7 @@ jobs:
 
       - name: Run playwright tests with pytest and generate allure report
         run: |
-          pytest -m regression --alluredir=./allure-results --numprocesses 2
+          pytest -m regression --alluredir=allure-results --numprocesses 2
 
       - name: Get allure history
         uses: actions/checkout@v4
@@ -42,25 +42,26 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      - name: Upload allure report as artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-report
+          path: allure-results
+
+  publish_report:
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: allure-report
+
       - name: Generate allure report with history
         uses: simple-elf/allure-report-action@master
         if: always()
         id: allure-report
         with:
-          allure_results: ./allure-results
+          allure_results: allure-results
           allure_history: allure-history
-
-      - name: Debug Allure Report
-        if: always()
-        run: |
-          echo "=== Содержимое allure-results ==="
-          ls -la allure-results/ | head -20
-
-          echo "=== Содержимое allure-report ==="
-          ls -la allure-report/ || echo "Папка allure-report не существует!"
-
-          echo "=== Поиск index.html ==="
-          find . -name "index.html" 2>/dev/null || echo "index.html не найден"
 
       - name: Deploy report to Github pages
         if: always()
