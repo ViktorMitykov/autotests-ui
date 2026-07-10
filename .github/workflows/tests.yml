@@ -41,6 +41,7 @@ jobs:
           path: allure-results
 
   publish_report:
+    needs: run-tests
     runs-on: ubuntu-latest
     permissions:
       contents: write
