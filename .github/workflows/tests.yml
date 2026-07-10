@@ -41,6 +41,11 @@ jobs:
           path: allure-results
 
   publish_report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v8
